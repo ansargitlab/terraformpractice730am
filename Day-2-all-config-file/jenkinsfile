@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+
+    environment {
+        TF_DIR = 'Day-2-all-config-file'
+    }
+    stages {
+        stage('git checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/ansargitlab/terraformpractice730am.git'
+            }
+        }
+        stage('init') {
+            steps {
+              dir(env.TF_DIR) {  
+                sh  'terraform init'
+            }
+            }
+        }
+        stage('plan') {
+            steps {
+              dir(env.TF_DIR) {  
+                sh  'terraform plan'
+            }
+            }
+        }
+        stage('apply') {
+            steps {
+                 dir(env.TF_DIR) { 
+                sh 'terraform ${action} -auto-approve'
+                 }
+            }
+        }
+    }
+}
