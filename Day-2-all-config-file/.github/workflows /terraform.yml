@@ -4,17 +4,18 @@ on:
   push:
     branches:
       - main  # Trigger on push to main branch
- env:
-   TF_DIR: ./Day-2-all-config-file
 
- job: 
+env:
+  TF_DIR: ./Day-2-all-config-file  # Global environment variable
+
+jobs:
   terraform:
-     name: terraform workflow
-     runs-on: ubuntu-latest
+    name: Terraform Workflow
+    runs-on: ubuntu-latest
 
-  defaults: 
-     run: 
-       working-directory: ${{ env.TF_DIR }}
+    defaults:
+      run:
+        working-directory: ${{ env.TF_DIR }}
 
     steps:
       - name: Checkout code
@@ -32,5 +33,5 @@ on:
         run: terraform plan -out=tfplan
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main'  # Only apply on main branch
+        if: github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve tfplan
